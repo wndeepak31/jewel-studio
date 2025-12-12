@@ -1,0 +1,9 @@
+node_modules/
+.next/
+public/assets/**/*.zip
+public/assets/**/*.3dm
+public/assets/**/*.rar
+public/assets/**/*.max
+public/assets/**/*.blend
+*.log
+.DS_Store
