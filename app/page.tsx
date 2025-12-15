@@ -1,1 +1,5 @@
-export default function Page(){return <div className='p-10 text-2xl'>Ring Studio Working</div>}
+import { redirect } from "next/navigation";
+
+export default function Page() {
+  redirect("/ring-studio");
+}
