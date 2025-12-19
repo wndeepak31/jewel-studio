@@ -105,6 +105,12 @@ const SETTINGS: Option[] = [
 
 const METALS: Option[] = [
   {
+    id: "14k-wg",
+    label: "14K",
+    subLabel: "White",
+    image: "/studio/metals/14K_White_Gold.svg",
+  },
+  {
     id: "14k-yg",
     label: "14K",
     subLabel: "Yellow",
@@ -117,10 +123,10 @@ const METALS: Option[] = [
     image: "/studio/metals/14K_Rose_Gold.svg",
   },
   {
-    id: "14k-wg",
-    label: "14K",
+    id: "18k-wg",
+    label: "18K",
     subLabel: "White",
-    image: "/studio/metals/14K_White_Gold.svg",
+    image: "/studio/metals/18K_White_Gold.svg",
   },
   {
     id: "18k-yg",
@@ -134,12 +140,7 @@ const METALS: Option[] = [
     subLabel: "Rose",
     image: "/studio/metals/18K_Rose_Gold.svg",
   },
-  {
-    id: "18k-wg",
-    label: "18K",
-    subLabel: "White",
-    image: "/studio/metals/18K_White_Gold.svg",
-  },
+
 ];
 
 const MATCHING_BANDS = ["0", "1", "2"];
