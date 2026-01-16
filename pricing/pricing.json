@@ -1,0 +1,142 @@
+{
+  "shanks": {
+    "channel-ascent": {
+      "name": "Channel Ascent",
+      "basePrice": 32000,
+      "baseWeight": null
+    },
+    "graduated-prong-ascent-melee": {
+      "name": "Graduated Prong Ascent Melee",
+      "basePrice": 36000,
+      "baseWeight": null
+    },
+    "graduated-prong-ascent-star": {
+      "name": "Graduated Prong Ascent Star",
+      "basePrice": 38000,
+      "baseWeight": null
+    },
+    "split-shank": {
+      "name": "Split Shank",
+      "basePrice": 36000,
+      "baseWeight": null
+    },
+    "tapered-baguette": {
+      "name": "Tapered Baguette",
+      "basePrice": 42000,
+      "baseWeight": null
+    },
+    "traditional-solitaire": {
+      "name": "Traditional Solitaire",
+      "basePrice": 30000,
+      "baseWeight": null
+    },
+    "traditional-band-solitaire": {
+      "name": "Traditional Band Solitaire",
+      "basePrice": 34000,
+      "baseWeight": null
+    }
+  },
+  "heads": {
+    "H1": {
+      "name": "Classic 4 Prong",
+      "basePrice": 3500,
+      "baseWeight": null
+    },
+    "H2": {
+      "name": "Classic 4 Prong – Classic",
+      "basePrice": 4500,
+      "baseWeight": null
+    },
+    "H3": {
+      "name": "Classic 4 Prong – Variant",
+      "basePrice": 5500,
+      "baseWeight": null
+    },
+    "H4": {
+      "name": "Classic 4 Prong – Cathedral",
+      "basePrice": 6500,
+      "baseWeight": null
+    },
+    "H5": {
+      "name": "Classic 4 Prong – Royal Club",
+      "basePrice": 7500,
+      "baseWeight": null
+    },
+    "H6": {
+      "name": "Classic 6 Prong – Hidden Halo",
+      "basePrice": 9500,
+      "baseWeight": null
+    }
+  },
+  "diamonds": {
+    "round": {
+      "1.00": null,
+      "2.00": null,
+      "2.50": null,
+      "3.00": null,
+      "3.50": null,
+      "4.00": null
+    },
+    "oval": {
+      "1.00": null
+    },
+    "princess": {
+      "1.00": null
+    },
+    "emerald": {
+      "1.00": null
+    }
+  },
+  "carats": {
+    "1.00": {
+      "headMultiplier": 1,
+      "shankMultiplier": null
+    },
+    "2.00": {
+      "headMultiplier": 1.25,
+      "shankMultiplier": null
+    },
+    "2.50": {
+      "headMultiplier": 1.35,
+      "shankMultiplier": null
+    },
+    "3.00": {
+      "headMultiplier": 1.5,
+      "shankMultiplier": null
+    },
+    "3.50": {
+      "headMultiplier": 1.65,
+      "shankMultiplier": null
+    },
+    "4.00": {
+      "headMultiplier": 1.8,
+      "shankMultiplier": null
+    }
+  },
+  "metals": {
+    "14k-white": {
+      "name": "14K White Gold",
+      "purity": null
+    },
+    "14k-yellow": {
+      "name": "14K Yellow Gold",
+      "purity": null
+    },
+    "14k-rose": {
+      "name": "14K Rose Gold",
+      "purity": null
+    },
+    "18k-white": {
+      "name": "18K White Gold",
+      "purity": null
+    },
+    "18k-yellow": {
+      "name": "18K Yellow Gold",
+      "purity": null
+    },
+    "18k-rose": {
+      "name": "18K Rose Gold",
+      "purity": null
+    }
+  }
+}

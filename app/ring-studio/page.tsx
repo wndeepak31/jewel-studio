@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import RingLivePreview from "./../../components/RingLivePreview";
+import { useRingPrice } from "@/hooks/useRingPrice";
+
 
 
 type Option = {
@@ -154,7 +156,15 @@ export default function RingStudioPage() {
   const [metalId, setMetalId] = useState("14k-yg");
   const [bandCount, setBandCount] = useState("1");
 
-  const ringPrice = 1255;
+  const { price: ringPrice, loading: priceLoading } = useRingPrice({
+    shankId: styleId,
+    headId: normalizeSetting(settingId),
+    shape: shapeId,
+    carat: normalizeCaratForPricing(shapeId, caratId),
+    metalId: normalizeMetalForPricing(metalId),
+  });
+
+
   const bandPrice = bandCount === "0" ? 0 : 890;
   const total = ringPrice + bandPrice;
 
@@ -348,9 +358,10 @@ export default function RingStudioPage() {
                     <div className="flex justify-between gap-4">
                       <span className="text-gray-500">Engagement Ring :</span>
                       <span className="font-semibold">
-                        ${ringPrice.toLocaleString()}
+                        {priceLoading ? "Calculating…" : `$${ringPrice.toLocaleString()}`}
                       </span>
                     </div>
+
 
                     <div className="flex justify-between gap-4">
                       <span className="text-gray-500">Band :</span>
@@ -727,8 +738,19 @@ function normalizeSetting(id: string) {
   return map[id] || "H1";
 }
 
-function normalizeCarat(shapeId: string, caratId: string) {
-  // Shapes other than round ONLY have 1.00 ct images
+function normalizeCaratForPricing(shapeId: string, caratId: string) {
+  // Non-round shapes only priced at 1.00 ct
   if (shapeId !== "round") return "1.00";
   return caratId;
+}
+
+
+function normalizeMetalForPricing(id: string) {
+  if (id === "14k-wg") return "14k-white";
+  if (id === "14k-yg") return "14k-yellow";
+  if (id === "14k-rg") return "14k-rose";
+  if (id === "18k-wg") return "18k-white";
+  if (id === "18k-yg") return "18k-yellow";
+  if (id === "18k-rg") return "18k-rose";
+  return "14k-white";
 }
