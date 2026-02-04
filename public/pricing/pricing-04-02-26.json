@@ -2,71 +2,71 @@
   "shanks": {
     "channel-ascent": {
       "name": "Channel Ascent",
-      "basePrice": 31455,
-      "baseWeight": 2.70
+      "basePrice": 32000,
+      "baseWeight": 4.8
     },
     "graduated-prong-ascent-melee": {
       "name": "Graduated Prong Ascent Melee",
-      "basePrice": 31455,
-      "baseWeight": 2.70
+      "basePrice": 36000,
+      "baseWeight": 5.1
     },
     "graduated-prong-ascent-star": {
       "name": "Graduated Prong Ascent Star",
-      "basePrice": 27960,
+      "basePrice": 38000,
       "baseWeight": 2.40 
     },
     "split-shank": {
       "name": "Split Shank",
-      "basePrice": 29125,
-      "baseWeight": 2.50
+      "basePrice": 36000,
+      "baseWeight": 5.6
     },
     "tapered-baguette": {
       "name": "Tapered Baguette",
-      "basePrice": 23300,
-      "baseWeight": 2.00
+      "basePrice": 42000,
+      "baseWeight": 6.2
     },
     "traditional-solitaire": {
       "name": "Traditional Solitaire",
-      "basePrice": 34950,
-      "baseWeight": 3.00
+      "basePrice": 30000,
+      "baseWeight": 4.2
     },
     "traditional-band-solitaire": {
       "name": "Traditional Band Solitaire",
-      "basePrice": 58250,
-      "baseWeight": 5.00
+      "basePrice": 34000,
+      "baseWeight": 4.9
     }
   },
 
   "heads": {
     "H1": {
       "name": "Classic 4 Prong",
-      "basePrice": 5825,
+      "basePrice": 3500,
       "baseWeight": 0.50
     },
     "H2": {
       "name": "Classic 4 Prong – Classic",
-      "basePrice": 6990,
-      "baseWeight": 0.60
+      "basePrice": 4500,
+      "baseWeight": 1.25
     },
     "H3": {
       "name": "Classic 4 Prong – Variant",
-      "basePrice": 4077.5,
-      "baseWeight": 0.35
+      "basePrice": 5500,
+      "baseWeight": 1.4
     },
     "H4": {
       "name": "Classic 4 Prong – Cathedral",
-      "basePrice": 5825,
-      "baseWeight": 0.50
+      "basePrice": 6500,
+      "baseWeight": 1.6
     },
     "H5": {
       "name": "Classic 4 Prong – Royal Club",
-      "basePrice": 4660,
-      "baseWeight": 0.40
+      "basePrice": 7500,
+      "baseWeight": 1.8
     },
     "H6": {
       "name": "Classic 6 Prong – Hidden Halo",
-      "basePrice": 9553,
-      "baseWeight": 0.82
+      "basePrice": 9500,
+      "baseWeight": 2.1
     }
   },
 

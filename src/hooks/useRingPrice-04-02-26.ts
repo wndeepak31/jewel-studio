@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { loadPricing, calculatePrice, RingConfig } from "../lib/pricing";
 
-const GOLD_RATE_24K = 16053; // Can later be moved to env or API
+const GOLD_RATE_24K = 6200; // Can later be moved to env or API
 
 export function useRingPrice(config: RingConfig) {
   const [price, setPrice] = useState<number>(0);

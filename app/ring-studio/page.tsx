@@ -148,9 +148,9 @@ const METALS: Option[] = [
 export default function RingStudioPage() {
   const [activeTab, setActiveTab] = useState("Most Popular");
   const [styleId, setStyleId] = useState("channel-ascent");
-  const [shapeId, setShapeId] = useState("oval");
-  const [caratId, setCaratId] = useState("4.00");
-  const [settingId, setSettingId] = useState("classic-6prong-hidden-halo");
+  const [shapeId, setShapeId] = useState("round");
+  const [caratId, setCaratId] = useState("1.00");
+  const [settingId, setSettingId] = useState("classic-4prong");
   const [metalId, setMetalId] = useState("14k-yg");
 
   const { price: ringPrice, loading: priceLoading } = useRingPrice({
@@ -353,7 +353,7 @@ export default function RingStudioPage() {
 
                   {/* Note */}
                   <p className="text-[11px] text-gray-500 mt-1 text-right">
-                    Diamond price will be added on the next step.
+                    {/* Diamond price will be added on the next step. */}
                   </p>
 
                   {/* Button */}
