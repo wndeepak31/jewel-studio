@@ -358,7 +358,7 @@ export default function RingStudioPage() {
                     <div className="flex justify-between gap-4">
                       <span className="text-gray-500">Engagement Ring :</span>
                       <span className="font-semibold">
-                        {priceLoading ? "Calculating…" : `$${ringPrice.toLocaleString()}`}
+                        {priceLoading ? "Calculating…" : `₹${ringPrice.toLocaleString()}`}
                       </span>
                     </div>
 
@@ -368,14 +368,14 @@ export default function RingStudioPage() {
                       <span className="font-semibold">
                         {bandPrice === 0
                           ? "$0.00"
-                          : `$${bandPrice.toLocaleString()}`}
+                          : `₹${bandPrice.toLocaleString()}`}
                       </span>
                     </div>
 
                     <div className="flex justify-between gap-4 mt-2 border-t pt-2">
                       <span className="font-semibold">TOTAL :</span>
                       <span className="font-semibold">
-                        ${total.toLocaleString()}
+                        ₹{total.toLocaleString()}
                       </span>
                     </div>
 

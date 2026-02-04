@@ -13,7 +13,7 @@
     "graduated-prong-ascent-star": {
       "name": "Graduated Prong Ascent Star",
       "basePrice": 38000,
-      "baseWeight": 5.3
+      "baseWeight": 2.40 
     },
     "split-shank": {
       "name": "Split Shank",
@@ -41,7 +41,7 @@
     "H1": {
       "name": "Classic 4 Prong",
       "basePrice": 3500,
-      "baseWeight": 1.1
+      "baseWeight": 0.50
     },
     "H2": {
       "name": "Classic 4 Prong – Classic",
@@ -80,13 +80,28 @@
       "4.00": 310000
     },
     "oval": {
-      "1.00": 72000
+      "1.00": 72000,
+      "2.00": 130000,
+      "2.50": 170000,
+      "3.00": 220000,
+      "3.50": 260000,
+      "4.00": 310000
     },
     "princess": {
-      "1.00": 68000
+      "1.00": 68000,
+      "2.00": 130000,
+      "2.50": 170000,
+      "3.00": 220000,
+      "3.50": 260000,
+      "4.00": 310000
     },
     "emerald": {
-      "1.00": 75000
+      "1.00": 75000,
+      "2.00": 130000,
+      "2.50": 170000,
+      "3.00": 220000,
+      "3.50": 260000,
+      "4.00": 310000
     }
   },
 
@@ -132,15 +147,15 @@
     },
     "18k-white": {
       "name": "18K White Gold",
-      "purity": 0.75
+      "purity": 0.755
     },
     "18k-yellow": {
       "name": "18K Yellow Gold",
-      "purity": 0.75
+      "purity": 0.755
     },
     "18k-rose": {
       "name": "18K Rose Gold",
-      "purity": 0.75
+      "purity": 0.755
     }
   }
 }
