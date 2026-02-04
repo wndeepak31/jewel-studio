@@ -145,6 +145,8 @@ const METALS: Option[] = [
 
 ];
 
+const MATCHING_BANDS = ["0", "1", "2"];
+
 export default function RingStudioPage() {
   const [activeTab, setActiveTab] = useState("Most Popular");
   const [styleId, setStyleId] = useState("channel-ascent");
@@ -152,6 +154,7 @@ export default function RingStudioPage() {
   const [caratId, setCaratId] = useState("4.00");
   const [settingId, setSettingId] = useState("classic-6prong-hidden-halo");
   const [metalId, setMetalId] = useState("14k-yg");
+  const [bandCount, setBandCount] = useState("1");
 
   const { price: ringPrice, loading: priceLoading } = useRingPrice({
     shankId: styleId,
@@ -162,8 +165,8 @@ export default function RingStudioPage() {
   });
 
 
-  const total = ringPrice;
-
+  const bandPrice = bandCount === "0" ? 0 : 890;
+  const total = ringPrice + bandPrice;
 
   const selectedStyle = STYLE_OPTIONS.find((s) => s.id === styleId);
 
@@ -326,47 +329,68 @@ export default function RingStudioPage() {
               </Section>
 
               {/* PRICE + BAND */}
+              <div className="mt-7 border-t pt-6 grid grid-cols-12 items-center gap-6">
+                {/* Matching band */}
+                <div className="col-span-6">
+                  <div className="text-xs font-semibold tracking-[0.12em] text-gray-500 mb-3">
+                    MATCHING BAND
+                  </div>
+                  <div className="inline-flex border border-gray-300 rounded-full overflow-hidden text-sm bg-gray-50">
+                    {MATCHING_BANDS.map((b) => (
+                      <button
+                        key={b}
+                        onClick={() => setBandCount(b)}
+                        className={`px-4 py-1.5 border-r last:border-r-0 transition-colors ${
+                          bandCount === b
+                            ? "bg-gray-900 text-white"
+                            : "bg-transparent text-gray-700 hover:bg-white"
+                        }`}
+                      >
+                        {b}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-              {/* Price block */}
-              <div className="col-span-6 flex justify-end items-center">
+                {/* Price block */}
+                <div className="col-span-6 flex items-center justify-between">
+                  <div className="text-xs">
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500">Engagement Ring :</span>
+                      <span className="font-semibold">
+                        {priceLoading ? "Calculating…" : `₹${ringPrice.toLocaleString()}`}
+                      </span>
+                    </div>
 
-                <div className="w-full max-w-sm text-sm">
 
-                  {/* Engagement Ring */}
-                  <div className="grid grid-cols-[1fr_auto] items-center py-1">
-                    <span className="text-gray-600">Engagement Ring</span>
-                    <span className="font-semibold text-right">
-                      ₹{ringPrice.toLocaleString("en-IN")}
-                    </span>
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500">Band :</span>
+                      <span className="font-semibold">
+                        {bandPrice === 0
+                          ? "$0.00"
+                          : `₹${bandPrice.toLocaleString()}`}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between gap-4 mt-2 border-t pt-2">
+                      <span className="font-semibold">TOTAL :</span>
+                      <span className="font-semibold">
+                        ₹{total.toLocaleString()}
+                      </span>
+                    </div>
+
+                    <p className="text-[10px] text-gray-500 mt-1">
+                      Diamond price will be added on the next step.
+                    </p>
                   </div>
 
-                  {/* Divider */}
-                  <div className="border-t my-2" />
-
-                  {/* Total */}
-                  <div className="grid grid-cols-[1fr_auto] items-center py-1 text-base">
-                    <span className="font-semibold text-gray-900">TOTAL</span>
-                    <span className="font-bold text-gray-900 text-right">
-                      ₹{total.toLocaleString("en-IN")}
-                    </span>
-                  </div>
-
-                  {/* Note */}
-                  <p className="text-[11px] text-gray-500 mt-1 text-right">
-                    Diamond price will be added on the next step.
-                  </p>
-
-                  {/* Button */}
-                  <div className="flex justify-end mt-4">
-                    <motion.button
-                      whileHover={{ scale: 1.03, y: -1 }}
-                      whileTap={{ scale: 0.97, y: 0 }}
-                      className="px-9 py-2.5 bg-black text-white text-sm rounded-full shadow-sm hover:bg-gray-900"
-                    >
-                      NEXT
-                    </motion.button>
-                  </div>
-
+                  <motion.button
+                    whileHover={{ scale: 1.03, y: -1 }}
+                    whileTap={{ scale: 0.97, y: 0 }}
+                    className="ml-6 px-9 py-2.5 bg-black text-white text-sm rounded-full shadow-sm hover:bg-gray-900"
+                  >
+                    NEXT
+                  </motion.button>
                 </div>
               </div>
             </motion.div>
