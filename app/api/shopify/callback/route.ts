@@ -6,7 +6,13 @@ export async function GET(request: Request) {
     const shop = searchParams.get('shop')
 
     if (!code || !shop) {
-        return new Response('Missing code or shop. Please click "Open app" from your Shopify dashboard.', { status: 400 })
+        const allParams = Object.fromEntries(searchParams.entries())
+        return new Response(`
+            <h1>Diagnostic Info</h1>
+            <p>Missing code or shop. Here are the parameters we DID receive:</p>
+            <pre style="background: #eee; padding: 10px;">${JSON.stringify(allParams, null, 2)}</pre>
+            <p>Please try clicking "Open app" again from your Shopify Admin dashboard.</p>
+        `, { status: 400, headers: { 'Content-Type': 'text/html' } })
     }
 
     try {
