@@ -16,13 +16,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    
     // ✅ ADD THESE TWO
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ],
+      "@/components/*": [
+        "components/*"
+      ]
     },
-
     "plugins": [
       {
         "name": "next"

@@ -7,3 +7,8 @@ public/assets/**/*.max
 public/assets/**/*.blend
 *.log
 .DS_Store
+
+
+.env
+.env.local
+.env.*
