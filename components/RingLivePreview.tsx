@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Props = {
@@ -19,64 +19,57 @@ export default function RingLivePreview({
   setting,
 }: Props) {
   const [view, setView] = useState(1);
-
-  // Currently visible image
   const [currentSrc, setCurrentSrc] = useState<string>("");
-
-  // Loading state
   const [loading, setLoading] = useState(false);
+  const cache = useRef<Map<string, { view1: string; view2: string }>>(new Map());
 
-  const finalCarat = carat;
-
-  /* Build image path */
-  const buildPath = (v: number, c: string = finalCarat) =>
+  /* Build filesystem fallback path */
+  const buildFallbackPath = (v: number, c: string = carat) =>
     `/studio/rings/${style}/${shape}/${c}/${metal}/${setting}/view${v}.jpg`;
 
-  /* Load image smoothly */
+  /* Load image: try API first, then filesystem */
   useEffect(() => {
     let mounted = true;
-
-    const selectedPath = buildPath(view);
-
     setLoading(true);
 
-    const img = new Image();
-    img.src = selectedPath;
+    const comboKey = `${style}|${shape}|${carat}|${metal}|${setting}`;
 
-    img.onload = () => {
-      if (!mounted) return;
+    async function loadImage() {
+      // Check cache first
+      const cached = cache.current.get(comboKey);
+      if (cached) {
+        const src = view === 1 ? cached.view1 : cached.view2;
+        if (src) {
+          if (mounted) { setCurrentSrc(src); setLoading(false); }
+          return;
+        }
+      }
 
-      setCurrentSrc(selectedPath);
-      setLoading(false);
-    };
+      // Try API (Cloudinary images)
+      try {
+        const res = await fetch(
+          `/api/ring-preview?style=${encodeURIComponent(style)}&shape=${encodeURIComponent(shape)}&carat=${encodeURIComponent(carat)}&metal=${encodeURIComponent(metal)}&setting=${encodeURIComponent(setting)}`
+        );
 
-    img.onerror = () => {
-      // Fallback to 1.00 ct
-      const fallbackPath = buildPath(view, "1.00");
+        if (res.ok) {
+          const data = await res.json();
+          cache.current.set(comboKey, { view1: data.view1Url, view2: data.view2Url || data.view1Url });
+          const src = view === 1 ? data.view1Url : (data.view2Url || data.view1Url);
+          if (mounted) { setCurrentSrc(src); setLoading(false); }
+          return;
+        }
+      } catch (e) {
+        // API failed
+      }
 
-      const fallbackImg = new Image();
-      fallbackImg.src = fallbackPath;
+      // No uploaded image found — show blank preview
+      if (mounted) { setCurrentSrc(""); setLoading(false); }
+    }
 
-      fallbackImg.onload = () => {
-        if (!mounted) return;
+    loadImage();
 
-        setCurrentSrc(fallbackPath);
-        setLoading(false);
-      };
-    };
-
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, [style, shape, carat, metal, setting, view]);
-
-  /* Preload both views (performance boost) */
-  useEffect(() => {
-    [1, 2].forEach((v) => {
-      const img = new Image();
-      img.src = buildPath(v);
-    });
-  }, [style, shape, carat, metal, setting]);
 
   return (
     <motion.div
@@ -86,10 +79,7 @@ export default function RingLivePreview({
       transition={{ duration: 0.45, ease: "easeOut" }}
     >
       {/* ================= PREVIEW ================= */}
-
       <div className="relative w-full aspect-[4/5] rounded-2xl flex items-center justify-center overflow-hidden bg-white">
-
-        {/* Image Layer */}
         <AnimatePresence mode="wait">
           {currentSrc && (
             <motion.img
@@ -108,34 +98,29 @@ export default function RingLivePreview({
 
         {/* Loading Overlay */}
         {loading && (
-          <div className="absolute inset-0 bg-white/50 backdrop-blur-sm animate-pulse" />
+          <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-gray-200 border-t-gray-600 rounded-full animate-spin" />
+          </div>
         )}
       </div>
 
       {/* ================= CONTROLS ================= */}
-
       <div className="flex justify-center gap-3 mt-4">
-
-        {/* Front View */}
         <button
           onClick={() => setView(1)}
-          className={`px-4 py-1.5 rounded-full text-xs border transition-all ${
-            view === 1
-              ? "bg-black text-white border-black shadow-sm"
-              : "bg-white text-gray-700 border-gray-300 hover:border-gray-500"
-          }`}
+          className={`px-4 py-1.5 rounded-full text-xs border transition-all ${view === 1
+            ? "bg-black text-white border-black shadow-sm"
+            : "bg-white text-gray-700 border-gray-300 hover:border-gray-500"
+            }`}
         >
           Front View
         </button>
-
-        {/* Angle View */}
         <button
           onClick={() => setView(2)}
-          className={`px-4 py-1.5 rounded-full text-xs border transition-all ${
-            view === 2
-              ? "bg-black text-white border-black shadow-sm"
-              : "bg-white text-gray-700 border-gray-300 hover:border-gray-500"
-          }`}
+          className={`px-4 py-1.5 rounded-full text-xs border transition-all ${view === 2
+            ? "bg-black text-white border-black shadow-sm"
+            : "bg-white text-gray-700 border-gray-300 hover:border-gray-500"
+            }`}
         >
           Angle View
         </button>

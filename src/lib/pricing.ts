@@ -78,8 +78,6 @@ export function calculatePrice(
 
   // Final price
   const total =
-    shank.basePrice +
-    head.basePrice +
     metalPrice +
     diamondPrice;
 
