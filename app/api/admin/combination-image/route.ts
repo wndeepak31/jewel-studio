@@ -2,6 +2,8 @@ import { NextResponse, NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { verifyAuth } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(req: NextRequest) {
     const auth = await verifyAuth(req)
     if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
