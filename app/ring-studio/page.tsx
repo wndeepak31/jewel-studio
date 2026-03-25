@@ -101,6 +101,26 @@ export default function RingStudioPage() {
 
   useEffect(() => { calculatePrice(); }, [calculatePrice]);
 
+  /* ─── Auto-height for Shopify ─── */
+  useEffect(() => {
+    const sendHeight = () => {
+      const height = document.documentElement.scrollHeight;
+      window.parent.postMessage({ type: 'RING_STUDIO_HEIGHT', height }, '*');
+    };
+
+    const resizeObserver = new ResizeObserver(() => sendHeight());
+    resizeObserver.observe(document.body);
+    
+    // Initial and periodic backups
+    sendHeight();
+    const interval = setInterval(sendHeight, 1000);
+
+    return () => {
+      resizeObserver.disconnect();
+      clearInterval(interval);
+    };
+  }, []);
+
   /* ─── Derived state ────────────────────────────────────────── */
   const selectedStyle = Array.isArray(ringStyles) ? ringStyles.find(s => s.id === styleId) : null;
   const selectedMetal = Array.isArray(metals) ? metals.find(m => m.id === metalId) : null;
@@ -126,7 +146,7 @@ export default function RingStudioPage() {
 
   return (
     <div className="min-h-screen bg-[#FAF8F5]">
-      <div className="max-w-[1440px] mx-auto pt-4 sm:pt-6 pb-8 sm:pb-12 px-4 sm:px-6">
+      <div className="w-full max-w-[1600px] mx-auto pt-4 sm:pt-6 pb-8 sm:pb-12 px-2 sm:px-6">
 
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-medium flex justify-between items-center">
@@ -152,7 +172,7 @@ export default function RingStudioPage() {
         </div>
 
         {/* ─── Main Layout: stacked on mobile, side-by-side on desktop ─── */}
-        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 lg:gap-8 items-start">
 
           {/* ─── Preview (top on mobile, left on desktop) ─── */}
           <div className="w-full lg:col-span-5">
@@ -346,6 +366,20 @@ export default function RingStudioPage() {
                   </div>
                   <motion.button
                     whileTap={{ scale: 0.97 }}
+                    onClick={() => {
+                      const details = {
+                        price: ringPrice,
+                        properties: {
+                          Style: selectedStyle?.name,
+                          Shape: selectedShape?.name,
+                          Carat: selectedCarat ? `${selectedCarat.value} ct` : undefined,
+                          Metal: selectedMetal ? `${selectedMetal.purity} ${selectedMetal.color}` : undefined,
+                          Setting: selectedSetting?.name,
+                          Diamond: selectedDiamond ? `${selectedDiamond.clarity}/${selectedDiamond.color}` : undefined
+                        }
+                      };
+                      window.parent.postMessage({ type: 'RING_STUDIO_CONTINUE', details }, '*');
+                    }}
                     className="px-6 sm:px-10 py-3 sm:py-3.5 bg-[#2C2418] text-white text-xs sm:text-sm font-semibold rounded-full shadow-[0_8px_24px_rgba(44,36,24,0.3)] hover:bg-[#1A1508] transition-colors tracking-wide whitespace-nowrap"
                   >
                     CONTINUE
