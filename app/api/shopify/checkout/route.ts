@@ -83,8 +83,11 @@ export async function POST(request: Request) {
         }
 
         return NextResponse.json({ checkout_url: data.draft_order.invoice_url })
-    } catch (error) {
+    } catch (error: any) {
         console.error('Checkout API error:', error)
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+        return NextResponse.json({ 
+            error: 'Internal Server Error', 
+            details: error.message || 'Unknown error'
+        }, { status: 500 })
     }
 }
