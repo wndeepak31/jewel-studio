@@ -369,13 +369,24 @@ export default function RingStudioPage() {
                     onClick={() => {
                       const details = {
                         price: ringPrice,
+                        image: selectedStyle?.imageUrl,
+                        selection: {
+                          styleId,
+                          shapeId,
+                          caratId,
+                          metalId,
+                          settingId,
+                          diamondId
+                        },
                         properties: {
-                          Style: selectedStyle?.name,
-                          Shape: selectedShape?.name,
-                          Carat: selectedCarat ? `${selectedCarat.value} ct` : undefined,
-                          Metal: selectedMetal ? `${selectedMetal.purity} ${selectedMetal.color}` : undefined,
-                          Setting: selectedSetting?.name,
-                          Diamond: selectedDiamond ? `${selectedDiamond.clarity}/${selectedDiamond.color}` : undefined
+                          "_builder_session": Date.now().toString(),
+                          "Style": selectedStyle?.name,
+                          "Shape": selectedShape?.name,
+                          "Carat": selectedCarat ? `${selectedCarat.value} ct` : undefined,
+                          "Metal": selectedMetal ? `${selectedMetal.purity} ${selectedMetal.color}` : undefined,
+                          "Setting": selectedSetting?.name,
+                          "Diamond": selectedDiamond ? `${selectedDiamond.clarity}/${selectedDiamond.color}` : undefined,
+                          "Total Price": `₹${ringPrice.toLocaleString("en-IN")}`
                         }
                       };
                       window.parent.postMessage({ type: 'RING_STUDIO_CONTINUE', details }, '*');
