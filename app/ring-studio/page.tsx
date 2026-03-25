@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import RingLivePreview from "./../../components/RingLivePreview";
+import { ChevronLeft, ChevronRight, Check, Star, Info, Loader2 } from 'lucide-react'
 
 /* ─── API Types ──────────────────────────────────────────────── */
 type ApiRingStyle = { id: string; name: string; slug: string; imageUrl: string; weight14k: number; weight18k: number; sideStoneWeight: number };
@@ -31,6 +32,7 @@ export default function RingStudioPage() {
 
   const [ringPrice, setRingPrice] = useState(0);
   const [priceLoading, setPriceLoading] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   /* ─── Fetch all data ───────────────────────────────────────── */
@@ -365,35 +367,54 @@ export default function RingStudioPage() {
                     )}
                   </div>
                   <motion.button
+                    disabled={isCheckingOut}
                     whileTap={{ scale: 0.97 }}
-                    onClick={() => {
-                      const details = {
-                        price: ringPrice,
-                        image: selectedStyle?.imageUrl,
-                        selection: {
-                          styleId,
-                          shapeId,
-                          caratId,
-                          metalId,
-                          settingId,
-                          diamondId
-                        },
-                        properties: {
-                          "_builder_session": Date.now().toString(),
-                          "Style": selectedStyle?.name,
-                          "Shape": selectedShape?.name,
-                          "Carat": selectedCarat ? `${selectedCarat.value} ct` : undefined,
-                          "Metal": selectedMetal ? `${selectedMetal.purity} ${selectedMetal.color}` : undefined,
-                          "Setting": selectedSetting?.name,
-                          "Diamond": selectedDiamond ? `${selectedDiamond.clarity}/${selectedDiamond.color}` : undefined,
-                          "Total Price": `₹${ringPrice.toLocaleString("en-IN")}`
+                    onClick={async () => {
+                      setIsCheckingOut(true);
+                      setError(null);
+                      try {
+                        const details = {
+                          price: ringPrice,
+                          image: selectedStyle?.imageUrl,
+                          properties: {
+                            "Style": selectedStyle?.name,
+                            "Shape": selectedShape?.name,
+                            "Carat": selectedCarat ? `${selectedCarat.value} ct` : undefined,
+                            "Metal": selectedMetal ? `${selectedMetal.purity} ${selectedMetal.color}` : undefined,
+                            "Setting": selectedSetting?.name,
+                            "Diamond": selectedDiamond ? `${selectedDiamond.clarity}/${selectedDiamond.color}` : undefined,
+                            "Total Price": `₹${ringPrice.toLocaleString("en-IN")}`
+                          }
+                        };
+                        
+                        const res = await fetch('/api/shopify/checkout', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify(details)
+                        });
+                        
+                        const data = await res.json();
+                        if (data.checkout_url) {
+                          window.top!.location.href = data.checkout_url;
+                        } else {
+                          throw new Error(data.error || 'Failed to create checkout');
                         }
-                      };
-                      window.parent.postMessage({ type: 'RING_STUDIO_CONTINUE', details }, '*');
+                      } catch (err) {
+                        console.error('Checkout error:', err);
+                        setError(err instanceof Error ? err.message : 'Checkout failed');
+                        setIsCheckingOut(false);
+                      }
                     }}
-                    className="px-6 sm:px-10 py-3 sm:py-3.5 bg-[#2C2418] text-white text-xs sm:text-sm font-semibold rounded-full shadow-[0_8px_24px_rgba(44,36,24,0.3)] hover:bg-[#1A1508] transition-colors tracking-wide whitespace-nowrap"
+                    className="px-6 sm:px-10 py-3 sm:py-3.5 bg-[#2C2418] text-white text-xs sm:text-sm font-semibold rounded-full shadow-[0_8px_24px_rgba(44,36,24,0.3)] hover:bg-[#1A1508] transition-colors tracking-wide whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
-                    CONTINUE
+                    {isCheckingOut ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        PROCESSING...
+                      </>
+                    ) : (
+                      'CONTINUE'
+                    )}
                   </motion.button>
                 </div>
 
