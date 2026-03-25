@@ -12,39 +12,41 @@ export async function POST(request: Request) {
         }
 
         // 1. Create a temporary product with the ring rendering
+        const productBody = {
+            product: {
+                title: `Ring Studio Order - ${new Date().getTime()}`,
+                body_html: "Professional Custom Design",
+                vendor: "Ring Studio",
+                status: "active", // Must be active for checkout
+                tags: "ring-builder-temp",
+                images: image ? [{ src: image }] : [],
+                variants: [
+                    {
+                        price: price,
+                        option1: "Default Title",
+                        requires_shipping: true,
+                        taxable: true
+                    }
+                ]
+            }
+        }
+
         const productResponse = await fetch(`https://${SHOPIFY_DOMAIN}/admin/api/2024-01/products.json`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Shopify-Access-Token': ACCESS_TOKEN,
             },
-            body: JSON.stringify({
-                product: {
-                    title: `Custom Ring Ordered - ${new Date().getTime()}`,
-                    body_html: `Customer selected ring configuration.`,
-                    vendor: "Ring Studio",
-                    product_type: "Custom Ring",
-                    status: "active",
-                    tags: "ring-builder-temp",
-                    images: image ? [{ src: image }] : [],
-                    variants: [
-                        {
-                            price: price,
-                            sku: `CUSTOM-${Date.now()}`,
-                            inventory_policy: 'continue',
-                            fulfillment_service: 'manual',
-                            inventory_management: null,
-                            option1: "Default Title"
-                        }
-                    ]
-                }
-            })
+            body: JSON.stringify(productBody)
         })
 
         const productData = await productResponse.json()
         if (!productResponse.ok) {
-            console.error('Shopify Product Creation Error:', productData)
-            throw new Error('Failed to create ring product')
+            console.error('Shopify Product Creation Error Body:', productData)
+            return NextResponse.json({ 
+                error: 'Shopify Product Creation Failed', 
+                shopify_error: productData 
+            }, { status: 500 })
         }
 
         const variantId = productData.product.variants[0].id
