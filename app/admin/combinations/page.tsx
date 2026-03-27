@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronDown, ChevronRight, Upload, X, RefreshCw, ImagePlus } from "lucide-react";
+import { ChevronDown, ChevronRight, Upload, X, RefreshCw, ImagePlus, Trash2 } from "lucide-react";
 
 type Option = { id: string; name: string; slug: string };
 type Metal = { id: string; name: string; purity: string; color: string };
@@ -229,238 +229,271 @@ export default function CombinationsPage() {
     }
 
     return (
-        <div className="space-y-8">
-            <div>
-                <h1 className="text-2xl font-bold text-gray-900">Combination Images</h1>
-                <p className="text-gray-500 text-sm mt-1">Upload ring preview images for each style + shape + carat + metal + setting combination</p>
+        <div className="max-w-7xl mx-auto px-1 sm:px-0 pb-20">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-8 sm:mb-10">
+                <div>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Combination Images</h1>
+                    <p className="text-sm text-gray-500 mt-1">Manage lifestyle and preview images for every ring configuration.</p>
+                </div>
+                <button
+                    onClick={fetchCombos}
+                    className="flex items-center justify-center p-2.5 sm:p-3 text-gray-400 hover:text-black hover:bg-white rounded-full transition-all"
+                    title="Refresh list"
+                >
+                    <RefreshCw size={20} />
+                </button>
             </div>
 
-            {/* Upload Form */}
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-5">
-                <h2 className="text-lg font-semibold text-gray-800">Upload New Combination</h2>
+            {/* Upload Form Section */}
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-sm border border-gray-100 mb-10 sm:mb-12">
+                <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+                    <h2 className="text-lg font-bold text-gray-800 border-b border-gray-50 pb-4">Create New Combination</h2>
 
-                {/* Selectors */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Ring Style</label>
-                        <select value={styleSlug} onChange={e => setStyleSlug(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-black/5">
-                            {Array.isArray(styles) && styles.map(s => <option key={s.id} value={s.slug}>{s.name}</option>)}
-                        </select>
+                    {/* Selection Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
+                        <div className="space-y-1.5 sm:space-y-2">
+                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Ring Style</label>
+                            <select
+                                value={styleSlug}
+                                onChange={e => setStyleSlug(e.target.value)}
+                                className="w-full px-4 py-2.5 sm:py-3.5 rounded-xl border border-gray-200 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-black/5 bg-gray-50/50 transition-all"
+                            >
+                                {Array.isArray(styles) && styles.map(s => <option key={s.id} value={s.slug}>{s.name}</option>)}
+                            </select>
+                        </div>
+                        <div className="space-y-1.5 sm:space-y-2">
+                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Shape</label>
+                            <select
+                                value={shapeSlug}
+                                onChange={e => setShapeSlug(e.target.value)}
+                                className="w-full px-4 py-2.5 sm:py-3.5 rounded-xl border border-gray-200 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-black/5 bg-gray-50/50 transition-all"
+                            >
+                                {Array.isArray(shapes) && shapes.map(s => <option key={s.id} value={s.slug}>{s.name}</option>)}
+                            </select>
+                        </div>
+                        <div className="space-y-1.5 sm:space-y-2">
+                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Carat</label>
+                            <select
+                                value={carat}
+                                onChange={e => setCarat(e.target.value)}
+                                className="w-full px-4 py-2.5 sm:py-3.5 rounded-xl border border-gray-200 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-black/5 bg-gray-50/50 transition-all"
+                            >
+                                {Array.isArray(carats) && carats.map(c => <option key={c.id} value={c.value.toFixed(2)}>{c.value} ct</option>)}
+                            </select>
+                        </div>
+                        <div className="space-y-1.5 sm:space-y-2">
+                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Metal Color</label>
+                            <select
+                                value={metal}
+                                onChange={e => setMetal(e.target.value)}
+                                className="w-full px-4 py-2.5 sm:py-3.5 rounded-xl border border-gray-200 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-black/5 bg-gray-50/50 transition-all"
+                            >
+                                <option value="white-gold">White Gold</option>
+                                <option value="yellow-gold">Yellow Gold</option>
+                                <option value="rose-gold">Rose Gold</option>
+                                <option value="platinum">Platinum</option>
+                            </select>
+                            <span className="text-[10px] text-gray-400 mt-1 block px-1">Covers both 14K & 18K purity</span>
+                        </div>
+                        <div className="space-y-1.5 sm:space-y-2">
+                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Setting Type</label>
+                            <select
+                                value={settingSlug}
+                                onChange={e => setSettingSlug(e.target.value)}
+                                className="w-full px-4 py-2.5 sm:py-3.5 rounded-xl border border-gray-200 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-black/5 bg-gray-50/50 transition-all"
+                            >
+                                {Array.isArray(settings) && settings.map(s => <option key={s.id} value={s.slug}>{s.name}</option>)}
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Shape</label>
-                        <select value={shapeSlug} onChange={e => setShapeSlug(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-black/5">
-                            {Array.isArray(shapes) && shapes.map(s => <option key={s.id} value={s.slug}>{s.name}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Carat</label>
-                        <select value={carat} onChange={e => setCarat(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-black/5">
-                            {Array.isArray(carats) && carats.map(c => <option key={c.id} value={c.value.toFixed(2)}>{c.value} ct</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Metal Color</label>
-                        <select value={metal} onChange={e => setMetal(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-black/5">
-                            <option value="white-gold">White Gold</option>
-                            <option value="yellow-gold">Yellow Gold</option>
-                            <option value="rose-gold">Rose Gold</option>
-                        </select>
-                        <span className="text-[10px] text-gray-400 mt-0.5 block">Same image for 14K &amp; 18K</span>
-                    </div>
-                    <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1.5">Setting</label>
-                        <select value={settingSlug} onChange={e => setSettingSlug(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-black/5">
-                            {Array.isArray(settings) && settings.map(s => <option key={s.id} value={s.slug}>{s.name} ({s.slug})</option>)}
-                        </select>
-                    </div>
-                </div>
 
-                {/* View Count Control */}
-                <div className="flex items-center gap-3">
-                    <span className="text-xs font-medium text-gray-600">Number of views:</span>
-                    <div className="flex gap-1">
-                        {[2, 3, 4].map(n => (
-                            <button
-                                key={n}
-                                type="button"
-                                onClick={() => setViewCount(n)}
-                                className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${viewCount === n ? "bg-black text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
-                            >{n}</button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* File Uploads — Dynamic */}
-                <div className={`grid gap-4 ${viewCount <= 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"}`}>
-                    {Array.from({ length: viewCount }, (_, i) => (
-                        <div key={i}>
-                            <label className="block text-xs font-medium text-gray-600 mb-1.5">
-                                {VIEW_LABELS[i]} {i === 0 && <span className="text-red-500">*</span>}{i > 0 && <span className="text-gray-400">(optional)</span>}
-                            </label>
-                            <div className="border-2 border-dashed border-gray-200 rounded-xl p-3 text-center hover:border-gray-400 transition-colors">
-                                <input type="file" accept="image/*" onChange={handleFileChange(i)} className="block w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-medium file:bg-black file:text-white hover:file:bg-gray-800" />
-                                {viewPreviews[i] && <img src={viewPreviews[i]} alt={`View ${i + 1}`} className="mt-2 max-h-24 mx-auto rounded-lg object-contain" />}
+                    {/* View Uploads Grid */}
+                    <div className="space-y-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Capture Views</label>
+                            <div className="flex bg-gray-50 p-1 rounded-xl w-fit">
+                                {[2, 3, 4].map(n => (
+                                    <button
+                                        key={n}
+                                        type="button"
+                                        onClick={() => setViewCount(n)}
+                                        className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${viewCount === n ? "bg-white text-black shadow-sm" : "text-gray-400 hover:text-gray-600"}`}
+                                    >
+                                        {n} Angles
+                                    </button>
+                                ))}
                             </div>
                         </div>
-                    ))}
-                </div>
 
-                {/* Combination Preview Label */}
-                <div className="bg-gray-50 rounded-xl px-4 py-3 text-xs text-gray-500 font-mono">
-                    Preview path: <span className="text-gray-800 font-semibold">{styleSlug}/{shapeSlug}/{carat}/{metal}/{settingSlug}</span>
-                </div>
-
-                {/* Submit */}
-                <div className="flex items-center gap-4">
-                    <button type="submit" disabled={uploading} className="px-8 py-3 bg-black text-white text-sm font-semibold rounded-xl hover:bg-gray-900 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed">
-                        {uploading ? "Uploading..." : "Save Combination Image"}
-                    </button>
-                    {message && <p className={`text-sm font-medium ${message.startsWith("✓") ? "text-green-600" : "text-red-500"}`}>{message}</p>}
-                </div>
-            </form>
-
-            {/* Grouped Combinations */}
-            <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-gray-800">Uploaded Combinations</h2>
-                    <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-medium">{combos.length} total</span>
-                </div>
-
-                {Object.keys(grouped).length === 0 ? (
-                    <p className="text-gray-400 text-sm py-8 text-center bg-white rounded-2xl border border-gray-100">No combination images uploaded yet.</p>
-                ) : (
-                    Object.entries(grouped).map(([styleSl, items]) => (
-                        <div key={styleSl} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                            {/* Group Header */}
-                            <button
-                                onClick={() => toggleGroup(styleSl)}
-                                className="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50/50 transition-colors"
-                            >
-                                <div className="flex items-center gap-3">
-                                    {expandedGroups.has(styleSl)
-                                        ? <ChevronDown size={18} className="text-gray-400" />
-                                        : <ChevronRight size={18} className="text-gray-400" />
-                                    }
-                                    <span className="font-semibold text-gray-900">{getStyleName(styleSl)}</span>
-                                    <span className="text-xs text-gray-400 font-mono">{styleSl}</span>
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+                            {Array.from({ length: viewCount }).map((_, i) => (
+                                <div key={i} className="relative aspect-square sm:aspect-[4/3] rounded-xl sm:rounded-3xl border-2 border-dashed border-gray-100 hover:border-black/5 transition-all flex flex-col items-center justify-center p-2 sm:p-4 bg-gray-50/30 group overflow-hidden">
+                                    {viewPreviews[i] ? (
+                                        <>
+                                            <img src={viewPreviews[i]} className="absolute inset-0 w-full h-full object-contain p-2" alt={VIEW_LABELS[i]} />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const f = [...viewFiles]; f[i] = null; setViewFiles(f);
+                                                    const p = [...viewPreviews]; p[i] = ""; setViewPreviews(p);
+                                                }}
+                                                className="absolute top-2 right-2 p-1.5 bg-white/90 backdrop-blur rounded-full text-red-500 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <label className="cursor-pointer flex flex-col items-center gap-1 sm:gap-2 text-center w-full h-full justify-center">
+                                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white flex items-center justify-center shadow-sm text-gray-300 group-hover:text-black transition-colors">
+                                                <ImagePlus size={24} />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{VIEW_LABELS[i]}</span>
+                                            <input type="file" className="hidden" onChange={handleFileChange(i)} accept="image/*" />
+                                        </label>
+                                    )}
                                 </div>
-                                <span className="text-xs bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full">{items.length} combos</span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Action Bar */}
+                    <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 pt-6 border-t border-gray-50">
+                        <button
+                            type="submit"
+                            disabled={uploading}
+                            className={`w-full sm:w-auto bg-black text-white px-10 sm:px-14 py-3.5 sm:py-4 rounded-full font-bold text-sm sm:text-base hover:bg-gray-900 transition-all shadow-xl flex items-center justify-center gap-3 ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
+                        >
+                            {uploading ? <RefreshCw className="animate-spin" size={20} /> : <Upload size={20} />}
+                            {uploading ? "Saving Combination..." : "Confirm & Save Combination"}
+                        </button>
+                        {message && (
+                            <div className={`text-sm font-bold flex items-center gap-2 ${message.includes("Error") || message.includes("Failed") ? "text-red-500" : "text-green-600"}`}>
+                                <span>{message}</span>
+                            </div>
+                        )}
+                    </div>
+                </form>
+            </div>
+
+            {/* List Header */}
+            <div className="flex items-center justify-between mb-8 px-1">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Combination Repository</h2>
+                <div className="px-3 py-1 bg-gray-100 rounded-full text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">{combos.length} Items</div>
+            </div>
+
+            {/* Grouped Accordion List */}
+            <div className="space-y-4">
+                {Object.entries(grouped).map(([styleS, styleCombos]) => {
+                    const isExpanded = expandedGroups.has(styleS);
+                    return (
+                        <div key={styleS} className="bg-white border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm transition-all hover:shadow-md">
+                            <button
+                                onClick={() => toggleGroup(styleS)}
+                                className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50/30 transition-colors"
+                            >
+                                <div className="flex items-center gap-4 sm:gap-6">
+                                    <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-all ${isExpanded ? "bg-black text-white shadow-lg" : "bg-gray-50 text-gray-300"}`}>
+                                        {isExpanded ? <ChevronDown size={24} /> : <ChevronRight size={24} />}
+                                    </div>
+                                    <div className="text-left">
+                                        <h3 className="font-bold text-gray-900 text-base sm:text-xl">{getStyleName(styleS)}</h3>
+                                        <p className="text-[10px] sm:text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">{styleCombos.length} Visual Variations</p>
+                                    </div>
+                                </div>
                             </button>
 
-                            {/* Group Content */}
-                            {expandedGroups.has(styleSl) && (
-                                <div className="border-t border-gray-100">
-                                    <table className="w-full text-sm">
-                                        <thead>
-                                            <tr className="bg-gray-50/50">
-                                                <th className="text-left py-2.5 px-4 text-xs font-medium text-gray-400">Shape</th>
-                                                <th className="text-left py-2.5 px-4 text-xs font-medium text-gray-400">Carat</th>
-                                                <th className="text-left py-2.5 px-4 text-xs font-medium text-gray-400">Metal</th>
-                                                <th className="text-left py-2.5 px-4 text-xs font-medium text-gray-400">Setting</th>
-                                                <th className="text-left py-2.5 px-4 text-xs font-medium text-gray-400">Views</th>
-                                                <th className="text-right py-2.5 px-4 text-xs font-medium text-gray-400">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {items.map(c => {
-                                                const allViews = VIEW_KEYS.map(k => c[k]).filter(Boolean);
-                                                return (
-                                                    <tr key={c.id} className="border-t border-gray-50 hover:bg-gray-50/30">
-                                                        <td className="py-3 px-4 font-medium text-gray-700">{c.shapeSlug}</td>
-                                                        <td className="py-3 px-4 text-gray-500">{c.carat}</td>
-                                                        <td className="py-3 px-4 text-gray-500">{c.metal}</td>
-                                                        <td className="py-3 px-4 text-gray-500">{c.settingSlug}</td>
-                                                        <td className="py-3 px-4">
-                                                            <div className="flex gap-2 items-center">
-                                                                {VIEW_KEYS.map((key, i) => {
+                            {isExpanded && (
+                                <div className="border-t border-gray-50">
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left min-w-[900px]">
+                                            <thead className="bg-gray-50/30 border-b border-gray-50">
+                                                <tr>
+                                                    <th className="px-6 sm:px-8 py-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Configuration Details</th>
+                                                    <th className="px-6 sm:px-8 py-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Image Matrix (Click to Swap)</th>
+                                                    <th className="px-6 sm:px-8 py-5 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Settings</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-50">
+                                                {styleCombos.map((c) => (
+                                                    <tr key={c.id} className="hover:bg-gray-50/10 transition-colors group">
+                                                        <td className="px-6 sm:px-8 py-6">
+                                                            <div className="space-y-1.5">
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="text-sm sm:text-base font-bold text-gray-900 capitalize">{c.shapeSlug}</span>
+                                                                    <span className="text-xs text-gray-300 font-bold">•</span>
+                                                                    <span className="text-xs sm:text-sm font-semibold text-gray-600">{c.carat} Carat</span>
+                                                                </div>
+                                                                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
+                                                                    <span className={c.metal === 'platinum' ? 'text-blue-400' : 'text-amber-500'}>{c.metal.replace('-', ' ')}</span>
+                                                                    <span className="text-gray-200">•</span>
+                                                                    <span className="text-gray-400">{c.settingSlug} Design</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-6 sm:px-8 py-6">
+                                                            <div className="flex gap-4">
+                                                                {VIEW_KEYS.map((key, idx) => {
                                                                     const url = c[key];
-                                                                    if (!url && i >= 2) return null; // Only show empty slots for the first 2
-                                                                    const isEditing = editingCombo === c.id && editViewIndex === i;
+                                                                    const isEditingThis = editingCombo === c.id && editViewIndex === idx;
 
                                                                     return (
-                                                                        <div key={key} className="relative group">
+                                                                        <div key={key} className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-xl border border-gray-100 bg-white flex items-center justify-center group/view overflow-hidden shadow-sm">
                                                                             {url ? (
-                                                                                <>
-                                                                                    <img src={url} alt={`v${i + 1}`} className="w-12 h-12 rounded-lg object-cover border border-gray-200" />
-                                                                                    {/* Hover overlay to replace */}
-                                                                                    <button
-                                                                                        onClick={() => { setEditingCombo(c.id); setEditViewIndex(i); setEditFile(null); setEditPreview(""); }}
-                                                                                        className="absolute inset-0 bg-black/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-                                                                                        title={`Replace ${VIEW_LABELS[i]}`}
-                                                                                    >
-                                                                                        <RefreshCw size={14} className="text-white" />
-                                                                                    </button>
-                                                                                </>
+                                                                                <img src={url} className="w-full h-full object-contain p-1.5 opacity-90 group-hover/view:opacity-50 transition-opacity" alt={`V${idx + 1}`} />
                                                                             ) : (
-                                                                                <button
-                                                                                    onClick={() => { setEditingCombo(c.id); setEditViewIndex(i); setEditFile(null); setEditPreview(""); }}
-                                                                                    className="w-12 h-12 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center hover:border-gray-400 transition-colors"
-                                                                                    title={`Add ${VIEW_LABELS[i]}`}
-                                                                                >
-                                                                                    <ImagePlus size={14} className="text-gray-300" />
-                                                                                </button>
+                                                                                <span className="text-[10px] text-gray-200 font-bold">{idx + 1}</span>
                                                                             )}
 
-                                                                            {/* Edit Popover */}
-                                                                            {isEditing && (
-                                                                                <div className="absolute top-full left-0 mt-2 z-50 bg-white rounded-xl shadow-xl border border-gray-200 p-3 w-48">
-                                                                                    <div className="flex items-center justify-between mb-2">
-                                                                                        <span className="text-[10px] font-medium text-gray-500">{VIEW_LABELS[i]}</span>
-                                                                                        <button onClick={() => { setEditingCombo(null); setEditViewIndex(null); }} className="text-gray-400 hover:text-gray-600"><X size={12} /></button>
-                                                                                    </div>
-                                                                                    <input
-                                                                                        type="file"
-                                                                                        accept="image/*"
-                                                                                        onChange={e => {
-                                                                                            const f = e.target.files?.[0] || null;
-                                                                                            setEditFile(f);
-                                                                                            if (f) {
-                                                                                                const reader = new FileReader();
-                                                                                                reader.onload = () => setEditPreview(reader.result as string);
-                                                                                                reader.readAsDataURL(f);
-                                                                                            }
-                                                                                        }}
-                                                                                        className="block w-full text-[10px] text-gray-500 file:mr-1 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-[10px] file:font-medium file:bg-gray-900 file:text-white mb-2"
-                                                                                    />
-                                                                                    {editPreview && <img src={editPreview} alt="preview" className="w-full h-20 rounded-lg object-contain mb-2 bg-gray-50" />}
-                                                                                    <button
-                                                                                        onClick={() => handleEditSave(c.id, key)}
-                                                                                        disabled={!editFile || editUploading}
-                                                                                        className="w-full py-1.5 text-[11px] font-semibold bg-black text-white rounded-lg disabled:bg-gray-300 hover:bg-gray-800 transition-colors"
-                                                                                    >
-                                                                                        {editUploading ? "Saving..." : "Save"}
-                                                                                    </button>
+                                                                            <label className="absolute inset-0 bg-black/40 opacity-0 group-hover/view:opacity-100 transition-all flex items-center justify-center cursor-pointer text-white">
+                                                                                <Upload size={18} />
+                                                                                <input
+                                                                                    type="file"
+                                                                                    className="hidden"
+                                                                                    onChange={(e) => {
+                                                                                        const file = e.target.files?.[0];
+                                                                                        if (file) {
+                                                                                            setEditingCombo(c.id);
+                                                                                            setEditViewIndex(idx);
+                                                                                            setEditFile(file);
+                                                                                            handleEditSave(c.id, key);
+                                                                                        }
+                                                                                    }}
+                                                                                />
+                                                                            </label>
+
+                                                                            {isEditingThis && editUploading && (
+                                                                                <div className="absolute inset-0 bg-white/90 flex items-center justify-center">
+                                                                                    <RefreshCw size={20} className="animate-spin text-black" />
                                                                                 </div>
                                                                             )}
                                                                         </div>
                                                                     );
                                                                 })}
-
-                                                                {/* Add more view button */}
-                                                                {allViews.length < 4 && allViews.length >= 2 && (
-                                                                    <button
-                                                                        onClick={() => { setEditingCombo(c.id); setEditViewIndex(allViews.length); setEditFile(null); setEditPreview(""); }}
-                                                                        className="w-12 h-12 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center hover:border-gray-400 transition-colors"
-                                                                        title="Add another view"
-                                                                    >
-                                                                        <ImagePlus size={14} className="text-gray-300" />
-                                                                    </button>
-                                                                )}
                                                             </div>
                                                         </td>
-                                                        <td className="py-3 px-4 text-right">
-                                                            <button onClick={() => handleDelete(c.id)} className="text-red-500 hover:text-red-700 text-xs font-medium">Delete</button>
+                                                        <td className="px-6 sm:px-8 py-6 text-right">
+                                                            <button
+                                                                onClick={() => handleDelete(c.id)}
+                                                                className="p-2 sm:p-3 text-gray-200 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                                                                title="Remove Combination"
+                                                            >
+                                                                <Trash2 size={20} />
+                                                            </button>
                                                         </td>
                                                     </tr>
-                                                );
-                                            })}
-                                        </tbody>
-                                    </table>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             )}
                         </div>
-                    ))
+                    );
+                })}
+                {combos.length === 0 && (
+                    <div className="py-20 text-center bg-white rounded-3xl border border-dashed border-gray-100">
+                        <p className="text-gray-400 font-medium">No combination records found.</p>
+                    </div>
                 )}
             </div>
         </div>
