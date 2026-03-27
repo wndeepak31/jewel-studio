@@ -84,15 +84,15 @@ export default function RingStylesPage() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto">
-            <div className="flex justify-between items-center mb-10">
+        <div className="max-w-6xl mx-auto px-1 sm:px-0">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-8 sm:mb-10">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Ring Styles</h1>
-                    <p className="text-gray-500 mt-1">Manage shank designs and weights for 14K and 18K.</p>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Ring Styles</h1>
+                    <p className="text-sm text-gray-500 mt-1">Manage shank designs and weights for 14K and 18K.</p>
                 </div>
                 <button
                     onClick={() => setIsAdding(true)}
-                    className="flex items-center gap-2 bg-black text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-900 transition-all shadow-lg"
+                    className="flex items-center justify-center gap-2 bg-black text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-full font-semibold hover:bg-gray-900 transition-all shadow-lg w-full sm:w-auto text-sm"
                 >
                     <Plus size={18} />
                     Add New Style
@@ -130,10 +130,6 @@ export default function RingStylesPage() {
                                 <label className="block text-[10px] font-medium text-gray-500 mb-1">18K Weight (g)</label>
                                 <input type="number" step="0.01" className="w-full px-3 py-2 rounded-xl border border-gray-100 text-sm" value={formData.weight18k} onChange={(e) => setFormData({ ...formData, weight18k: parseFloat(e.target.value) || 0 })} />
                             </div>
-                        </div>
-                        <div>
-                            <label className="block text-[10px] font-medium text-gray-500 mb-1">Side Stone Weight (ct)</label>
-                            <input type="number" step="0.01" className="w-full px-3 py-2 rounded-xl border border-gray-100 text-sm" value={formData.sideStoneWeight} onChange={(e) => setFormData({ ...formData, sideStoneWeight: parseFloat(e.target.value) || 0 })} />
                         </div>
                         <div className="flex gap-2">
                             <button onClick={() => handleSave()} className="flex-1 bg-black text-white py-2 rounded-xl text-sm font-semibold">Save</button>
