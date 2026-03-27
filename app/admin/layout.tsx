@@ -44,10 +44,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const navItems = [
         { name: "Overview", href: "/admin", icon: LayoutDashboard },
         { name: "Ring Styles", href: "/admin/ring-styles", icon: Layers },
+        { name: "Head Styles", href: "/admin/settings", icon: Settings },
         { name: "Metals", href: "/admin/metals", icon: Weight },
         { name: "Diamonds", href: "/admin/diamonds", icon: Gem },
         { name: "Shapes", href: "/admin/shapes", icon: Hexagon },
-        { name: "Settings", href: "/admin/settings", icon: Settings },
         { name: "Carats", href: "/admin/carats", icon: Diamond },
         { name: "Combinations", href: "/admin/combinations", icon: ImageIcon },
         { name: "Global Config", href: "/admin/config", icon: Globe },
