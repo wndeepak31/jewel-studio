@@ -74,26 +74,26 @@ export default function SettingsPage() {
         <div className="max-w-6xl mx-auto px-1 sm:px-0">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-8 sm:mb-10">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Ring Settings</h1>
-                    <p className="text-sm text-gray-500 mt-1">Manage prong/head settings and their weights.</p>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Head Styles</h1>
+                    <p className="text-sm text-gray-500 mt-1">Manage head/prong styles and their respective weights.</p>
                 </div>
                 <button
                     onClick={() => setIsAdding(true)}
                     className="flex items-center justify-center gap-2 bg-black text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-full font-semibold hover:bg-gray-900 transition-all shadow-lg w-full sm:w-auto text-sm"
                 >
                     <Plus size={18} />
-                    Add Setting
+                    Add Head Style
                 </button>
             </div>
 
             {isAdding && (
                 <div className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-dashed border-gray-200 mb-8 space-y-4 sm:space-y-6">
-                    <h3 className="font-bold text-gray-900">New Setting</h3>
+                    <h3 className="font-bold text-gray-900">New Head Style</h3>
                     <ImageUpload currentImage={formData.imageUrl} onUploadComplete={(url: string) => setFormData({ ...formData, imageUrl: url })} />
                     <input
                         type="text"
-                        placeholder="Setting Name"
-                        className="w-full px-4 py-2.5 sm:py-3 rounded-xl border border-gray-100 outline-none text-sm sm:text-base outline-none focus:ring-2 focus:ring-black/5"
+                        placeholder="Style Name (e.g. Classic 4-Prong)"
+                        className="w-full px-4 py-2.5 sm:py-3 rounded-xl border border-gray-100 outline-none text-sm sm:text-base outline-none focus:ring-2 focus:ring-black/5 font-medium shadow-inner"
                         value={formData.name}
                         onChange={e => setFormData({ ...formData, name: e.target.value })}
                     />
@@ -156,7 +156,7 @@ export default function SettingsPage() {
                 ))}
                 {Array.isArray(settings) && settings.length === 0 && !loading && (
                     <div className="col-span-full py-20 text-center text-gray-400">
-                        No head settings found.
+                        No head styles found.
                     </div>
                 )}
             </div>
