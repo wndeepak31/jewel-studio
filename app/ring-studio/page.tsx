@@ -157,22 +157,6 @@ export default function RingStudioPage() {
           </div>
         )}
 
-        {/* ─── Breadcrumb ─── */}
-        <div className="text-[11px] text-[#9B8E7E] mb-3 sm:mb-4 tracking-wide">
-          <span className="hover:text-[#6B5E4E] cursor-pointer transition-colors">Home</span>
-          <span className="mx-2 text-[#D1C7B7]">/</span>
-          <span className="text-[#6B5E4E]">Design Your Lab Grown Diamond Ring</span>
-        </div>
-
-        {/* ─── Step Progress ─── */}
-        <div className="flex items-center mb-6 sm:mb-8 bg-white rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-8 shadow-[0_2px_20px_rgba(0,0,0,0.04)] border border-[#F0EBE3] overflow-x-auto gap-2">
-          <StepItem step={1} label="Setting" active />
-          <div className="flex-1 min-w-[20px] h-[1px] bg-gradient-to-r from-[#C4A265] to-[#E8DFD0]" />
-          <StepItem step={2} label="Diamond" />
-          <div className="flex-1 min-w-[20px] h-[1px] bg-[#E8DFD0]" />
-          <StepItem step={3} label="Complete" />
-        </div>
-
         {/* ─── Main Layout: stacked on mobile, side-by-side on desktop ─── */}
         <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 lg:gap-8 items-start">
 
